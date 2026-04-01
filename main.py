@@ -20,8 +20,8 @@ while option != "7":
                    "=> : ")
     if option == "1":
         nombre = input("Ingrese el nombre del producto: ").capitalize().strip()
-        precio = pedir_precio()
-        cantidad = pedir_cantidad()
+        precio = pedir_precio("Ingrese el precio del producto: ")
+        cantidad = pedir_cantidad("Ingrese la cantidad del producto: ")
         agregar_producto(inventario, nombre, precio, cantidad)
         print("Producto agregado exitosamente")
     elif option == "2":
@@ -35,21 +35,31 @@ while option != "7":
             print("Producto no encontrado")
             
     elif option == "4":
-        nombre = input("Ingrese el nombre del producto: ").capitalize().strip()
         
-        nuevo_precio_input = input("Ingrese el nuevo precio del producto: ").strip()
-        nueva_cantidad_input = input("Ingrese la nueva cantidad del producto: ").strip()
+        nombre = input("\nIngrese el nombre del producto a actualizar: ").capitalize().strip()
         
-        #convertir solo si el usuario escribe algo
-        nuevo_precio = pedir_precio() if nuevo_precio_input.strip() != "" else None
-        nueva_cantidad = pedir_cantidad() if nueva_cantidad_input.strip() != "" else None
+        # 1. Buscamos si el producto existe antes de pedir nuevos datos
+        producto_encontrado = buscar_producto(inventario, nombre)
         
-        actualizado =actualizar_producto(inventario,nombre,nuevo_precio,nueva_cantidad)
-        
-        if actualizado:
-            print("Producto actualizado exitosamente")
+        if producto_encontrado:
+            print(f"\n>>> Editando: {producto_encontrado['nombre']} <<<")
+            print("--- (Presione ENTER para mantener el valor actual) ---")
+            
+            # 2. Pedimos los datos usando el mismo helper pero con opcional=True
+            # Esto permite que si el usuario da Enter, el valor sea None
+            nuevo_precio = pedir_precio(f"Nuevo precio [Actual: {producto_encontrado['precio']}]: ", opcional=True)
+            nueva_cantidad = pedir_cantidad(f"Nueva cantidad [Actual: {producto_encontrado['cantidad']}]: ", opcional=True)
+            
+            # 3. Ejecutamos la actualización en la lista
+            actualizado = actualizar_producto(inventario, nombre, nuevo_precio, nueva_cantidad)
+            
+            if actualizado:
+                print("✅ ¡Producto actualizado con éxito!")
+            else:
+                print("⚠️ No se realizaron cambios.")
         else:
-            print("Producto no encontrado")
+            print("❌ Error: El producto no existe en el inventario.")
+            
     elif option == "5":
         nombre = input("Ingrese el nombre del producto a eliminar: ")
         

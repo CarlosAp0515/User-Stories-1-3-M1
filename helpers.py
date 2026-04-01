@@ -1,22 +1,37 @@
-def pedir_precio():
+def pedir_precio(mensaje="Ingrese el precio: ", opcional=False):
     while True:
+        entrada = input(mensaje).strip().replace(",", ".")
+        
+        if not entrada and opcional: # Si es opcional y está vacío, sale
+            return None
+        if not entrada and not opcional: # Si NO es opcional y está vacío, error
+            print("Error: Este campo es obligatorio.")
+            continue
+            
         try:
-            precio = float(input("Ingrese el precio del producto: "))
+            precio = float(entrada)
             if precio < 0:
-                print("El precio no puede ser negativo")
+                print("Error: El precio no puede ser negativo.")
             else:
                 return precio
         except ValueError:
-            print("El precio debe ser un valor numérico")
+            print("Error: Ingrese un número válido.")
 
-def pedir_cantidad():
+def pedir_cantidad(mensaje="Ingrese la cantidad: ", opcional=False):
     while True:
+        entrada = input(mensaje).strip()
+        
+        if not entrada and opcional:
+            return None
+        if not entrada and not opcional:
+            print("Error: Este campo es obligatorio.")
+            continue
+            
         try:
-            cantidad = int(input("Ingrese la cantidad del producto: "))
+            cantidad = int(entrada)
             if cantidad < 0:
-                print("La cantidad no puede ser negativa")
+                print("Error: La cantidad no puede ser negativa.")
             else:
                 return cantidad
         except ValueError:
-            print("La cantidad debe ser un número entero")
-            
+            print("Error: Ingrese un número entero.")
